@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import urllib2, json, smtplib, os
 from urllib2 import URLError
 
