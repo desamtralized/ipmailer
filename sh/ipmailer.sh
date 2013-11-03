@@ -10,12 +10,18 @@ function checkDependencies(){
 }
 function sendMail(){
     # TODO: Find a way to send autehticated mails via bash without 3rd party applications.
-    echo -ne "Hello, my ip changed to: $1" |mail -s "IP Changed" $email
+    echo "Hello, my ip changed to: $1" |mail -s "IP Changed" $email
+}
+function sendNotification(){
+    ./terminal-notifier -title "$1" -message "$2"
 }
 function checkIp(){
     jsonip=`curl jsonip.com -s |cut -d "\"" -f 4`
     [[ -f lastIp ]] || touch lastIp
-    [[ `cat lastIp` == $jsonip ]] || sendMail $jsonip
+    [[ `cat lastIp` == $jsonip ]] || {
+        sendMail $jsonip;
+        [[ `uname` == "Darwin" ]] && sendNotification "IPMailer" "IP changed to $jsonip";
+    }
     echo $jsonip > lastIp
 }
 

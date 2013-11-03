@@ -1,4 +1,6 @@
-import urllib2, json, smtplib
+#!/usr/bin/python
+
+import urllib2, json, smtplib, os
 from urllib2 import URLError
 
 email = "example@gmail.com"
@@ -14,19 +16,19 @@ def checkIp():
 		f = open('mylastip', 'a+')
 		f.seek(0)
 		lastIp = f.read()
-		print lastIp
-		print jsonip['ip']
-
 		if lastIp != jsonip['ip'] :
 			sendMail("Hello, my ip Changed to: " + jsonip['ip'])
+			if os.popen('uname').read() == "Darwin\n" :
+			    sendNotification("IPMailer", "IP changed to " + jsonip['ip'])
 			f.seek(0)
 			f.truncate()
 			f.write(jsonip['ip'])
-
 		f.close()
 	except URLError, e:
 		return
-	
+		
+def sendNotification(t, m):
+    os.system('./terminal-notifier -title "'+t+'" -message "'+m+'"' )
 
 def sendMail(message):
 	try:
