@@ -10,7 +10,7 @@ function checkDependencies(){
 }
 function sendMail(){
     # TODO: Find a way to send autehticated mails via bash without 3rd party applications.
-    echo -ne "Hello, my ip changed to: $1" |mail -s "IP Changed" $email
+    echo "Hello, my ip changed to: $1" |mail -s "IP Changed" $email
 }
 function sendNotification(){
     ./terminal-notifier -title "$1" -message "$2"
